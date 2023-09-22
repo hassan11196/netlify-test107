@@ -1,8 +1,9 @@
 name: Update Project Name
 
 on:
-  repository_dispatch:
-    types: [update-project-name]
+  push:
+    branches:
+      - main # Adjust the branch name as needed
 
 jobs:
   update-project-name:
@@ -12,16 +13,27 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Check for initial commit
+        id: initial-commit
+        run: |
+          FIRST_COMMIT=$(git rev-list --max-parents=0 HEAD)
+          if [[ "$(git log -1 --pretty='%s' $FIRST_COMMIT)" == "Initial commit" ]]; then
+            echo "::set-output name=initial_commit::true"
+          else
+            echo "::set-output name=initial_commit::false"
+          fi
+
       - name: Replace placeholder in README
+        if: steps.initial-commit.outputs.initial_commit == 'true'
         run: |
           sed -i 's/__TemplateName__/'"$(basename $GITHUB_REPOSITORY)"'/g' README.md
-        working-directory: ${{ github.workspace }}
 
       - name: Commit changes
+        if: steps.initial-commit.outputs.initial_commit == 'true'
         run: |
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'actions@github.com'
-          git commit -am "Update README with new repository name"
+          git commit -am "Update README with project name"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
