@@ -1,13 +1,8 @@
-# Netlify CMS Template
+# Netlify CMS __TemplateName__ 
 
 ## One-click deploy
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/chazulle/netlify-cms-template&utm_source=github)
-
-
-
-
-
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/hassan11196/__TemplateName__&utm_source=github)
 
 
 # About the Template - Gatsby Starter Glass

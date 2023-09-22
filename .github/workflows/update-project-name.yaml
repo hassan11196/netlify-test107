@@ -1,0 +1,27 @@
+name: Update Project Name
+
+on:
+  repository_dispatch:
+    types: [update-project-name]
+
+jobs:
+  update-project-name:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Replace placeholder in README
+        run: |
+          sed -i 's/__TemplateName__/'"$(basename $GITHUB_REPOSITORY)"'/g' README.md
+        working-directory: ${{ github.workspace }}
+
+      - name: Commit changes
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git commit -am "Update README with new repository name"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
